@@ -3,4 +3,5 @@ build
 npm-debug.log
 .nyc
 config.env
+.env
 .DS_Store

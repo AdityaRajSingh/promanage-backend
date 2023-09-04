@@ -7,7 +7,7 @@ const MongoStore = require("connect-mongo")(session);
 
 var app = express();
 const PORT = process.env.PORT || 3000;
-dotenv.config({ path: "./config/config.env" });
+dotenv.config();
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
