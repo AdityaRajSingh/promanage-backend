@@ -7,7 +7,7 @@ const SkillSchema = new mongoose.Schema({
   },
   department: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,
