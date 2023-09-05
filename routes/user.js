@@ -4,35 +4,33 @@ const userModel = require("../models/User");
 const userSkillModel = require("../models/UserSkill");
 
 // Read a user by ID
-router.get("/:userId", ensureGuest, (req, res) => {
-  const id = req.params.userId;
-  let userRecord = {};
-  userModel
-    .findById(id)
-    .select("-__v -googleId -createdAt")
-    .exec()
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-      userRecord = user;
-      // res.json(user).status(200);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: error.message });
-    });
 
-  // Get user skills
-  userSkillModel
-    .find({ userId: id })
-    .exec()
-    .then((skills) => {
-      userRecord.skills = skills;
-      res.json(userRecord).status(200);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: error.message });
-    });
+router.get("/:userId", ensureGuest, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Find the user by userId
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Find the user's skills by userId
+    const userSkills = await userSkillModel.find({ userId });
+
+    // Construct the response JSON
+    const userDetails = {
+      user,
+      skills: userSkills,
+    };
+
+    // Send the response as JSON
+    res.json(userDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // Update a user by ID
