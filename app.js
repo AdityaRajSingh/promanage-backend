@@ -5,6 +5,8 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 
+const cors = require("cors");
+
 var app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config();
@@ -16,6 +18,12 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Passport config
 require("./config/passport")(passport);
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
