@@ -52,5 +52,6 @@ app.use("/user", require("./routes/user"));
 app.use("/users", require("./routes/users"));
 app.use("/project", require("./routes/project"));
 app.use("/project-user", require("./routes/project-user"));
+app.use("/skill", require("./routes/skill"));
 
 app.listen(PORT, console.log(`listening at ${PORT}`));
