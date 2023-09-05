@@ -2,12 +2,35 @@ const router = require("express").Router();
 const { ensureAuth, ensureGuest, ensureAdmin } = require("../middleware/auth");
 const userModel = require("../models/User");
 const userSkillModel = require("../models/UserSkill");
+const projectModal = require("../models/Project");
+const ProjectUser = require("../models/ProjectUser");
 
 // Read a user by ID
 
 router.get("/:userId", ensureGuest, async (req, res) => {
   try {
     const userId = req.params.userId;
+
+    const id = req.params.userId;
+
+    let projectUsers = await ProjectUser.find({ userId: id });
+
+    let projectIds = projectUsers.map((projectUser) => projectUser.projectId);
+
+    let projects = await projectModal.find({ _id: { $in: projectIds } });
+
+    let projectDetails = projects.map((project) => {
+      return {
+        projectId: project._id,
+        name: project.name,
+        description: project.description,
+        clientName: project.clientName,
+        estimatedDeliveryTime: project.estimatedDeliveryTime,
+        startDate: project.startDate,
+        endDate: project.endDate,
+        status: project.status,
+      };
+    });
 
     // Find the user by userId
     const user = await userModel
@@ -27,6 +50,7 @@ router.get("/:userId", ensureGuest, async (req, res) => {
     const userDetails = {
       user,
       skills: userSkills,
+      projects: projectDetails,
     };
 
     // Send the response as JSON
