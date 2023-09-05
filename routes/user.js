@@ -10,14 +10,18 @@ router.get("/:userId", ensureGuest, async (req, res) => {
     const userId = req.params.userId;
 
     // Find the user by userId
-    const user = await userModel.findById(userId);
+    const user = await userModel
+      .findById(userId)
+      .select("-__v -googleId -createdAt");
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     // Find the user's skills by userId
-    const userSkills = await userSkillModel.find({ userId });
+    const userSkills = await userSkillModel
+      .find({ userId })
+      .select("-__v -createdAt");
 
     // Construct the response JSON
     const userDetails = {
