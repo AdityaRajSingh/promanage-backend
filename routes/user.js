@@ -38,6 +38,7 @@ router.get("/:userId", ensureGuest, (req, res) => {
 // Update a user by ID
 router.put("/:userId", ensureGuest, (req, res) => {
   const id = req.params.userId;
+  console.log("Updated request Body", req.body);
   userModel
     .findByIdAndUpdate(id, req.body, { new: true })
     .select("-__v -googleId -createdAt")
@@ -46,7 +47,7 @@ router.put("/:userId", ensureGuest, (req, res) => {
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      res.status(200).json(uer);
+      res.status(200).json(user);
     })
     .catch((error) => {
       res.status(500).json({ error: error.message });

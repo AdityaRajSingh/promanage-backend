@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
 const ProjectUsersSchema = new mongoose.Schema({
-  ProjectId: {
+  projectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project", // Reference to the Project model
     required: true,
   },
-  UserId: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
     required: true,
   },
-  Status: {
+  status: {
     type: String,
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",

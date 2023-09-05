@@ -1,32 +1,32 @@
 const mongoose = require("mongoose");
 
 const ProjectSchema = new mongoose.Schema({
-  Name: {
+  name: {
     type: String,
     required: true,
   },
-  Description: {
+  description: {
     type: String,
     required: true,
   },
-  ClientName: {
+  clientName: {
     type: String,
     required: true,
   },
-  Status: {
+  status: {
     type: String,
     enum: ["Not Started", "In Progress", "Completed"],
     default: "Not Started",
   },
-  EstimatedDeliveryTime: {
+  estimatedDeliveryTime: {
     type: String,
     required: true,
   },
-  StartDate: {
+  startDate: {
     type: Date,
     required: true,
   },
-  EndDate: {
+  endDate: {
     type: Date,
     required: false,
   },
