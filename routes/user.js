@@ -57,7 +57,7 @@ router.put("/:userId", ensureGuest, (req, res) => {
 });
 
 // Delete a user by ID
-router.delete("/:userId", ensureAdmin, (req, res) => {
+router.delete("/:userId", ensureGuest, (req, res) => {
   const id = req.params.userId;
   userModel
     .findByIdAndRemove(id)
