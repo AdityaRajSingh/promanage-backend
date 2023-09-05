@@ -64,7 +64,7 @@ router.put("/:projectId", ensureGuest, (req, res) => {
 // Delete a user by ID
 router.delete("/:userId", ensureAdmin, (req, res) => {
   const id = req.params.projectId;
-  userModel
+  projectModal
     .findByIdAndRemove(id)
     .exec()
     .then((project) => {
@@ -72,6 +72,20 @@ router.delete("/:userId", ensureAdmin, (req, res) => {
         return res.status(404).json({ error: "Project not found" });
       }
       res.status(204).send();
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
+// Read all projects
+router.get("/", ensureGuest, (req, res) => {
+  projectModal
+    .find()
+    .select("-__v -createdAt")
+    .exec()
+    .then((projects) => {
+      res.json(projects).status(200);
     })
     .catch((error) => {
       res.status(500).json({ error: error.message });

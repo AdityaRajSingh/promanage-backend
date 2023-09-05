@@ -13,8 +13,4 @@ router.get("/login", ensureGuest, (req, res) => {
   res.render("login");
 });
 
-router.get("/project", ensureGuest, (req, res) => {
-  res.render("project");
-});
-
 module.exports = router;

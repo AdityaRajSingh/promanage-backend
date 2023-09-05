@@ -13,8 +13,8 @@ const ProjectUsersSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Pending", "Approved", "Rejected"],
-    default: "Pending",
+    enum: ["Not Started", "In Progress", "Completed"],
+    default: "Not Started",
   },
   createdAt: {
     type: Date,
