@@ -4,7 +4,7 @@ const userModel = require("../models/User");
 const userSkillModel = require("../models/UserSkill");
 
 // Read a user by ID
-router.get("/:userId", ensureAuth, (req, res) => {
+router.get("/:userId", ensureGuest, (req, res) => {
   const id = req.params.userId;
   let userRecord = {};
   userModel
@@ -36,7 +36,7 @@ router.get("/:userId", ensureAuth, (req, res) => {
 });
 
 // Update a user by ID
-router.put("/:userId", ensureAuth, (req, res) => {
+router.put("/:userId", ensureGuest, (req, res) => {
   const id = req.params.userId;
   userModel
     .findByIdAndUpdate(id, req.body, { new: true })
