@@ -3,7 +3,7 @@ const { ensureAuth, ensureGuest, ensureAdmin } = require("../middleware/auth");
 const userModel = require("../models/User");
 
 // Get Users
-router.get("/", ensureAuth, (req, res) => {
+router.get("/", ensureGuest, (req, res) => {
   userModel
     .find()
     .select("-__v -googleId -createdAt")
