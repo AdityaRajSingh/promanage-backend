@@ -1,16 +1,39 @@
 const router = require("express").Router();
-const { ensureGuest, ensureAdmin } = require("../middleware/auth");
+const { ensureGuest } = require("../middleware/auth");
 const projectUserModal = require("../models/ProjectUser");
 
-// Create a api route that would accept a project id and array of user ids and create a project user record for each user id, similarly update th project users based on the userId array and delete userId array from the project users
-
 router.post("/", ensureGuest, async (req, res) => {
-  const projectId = req.body.projectId;
-  const userIds = req.body.userIds;
+  let projectId = req.body.projectId;
+  let newUserIds = req.body.userIds;
+
   try {
-    const projectUsers = await createProjectUsers(projectId, userIds);
-    res.status(201).json(projectUsers);
+    await projectUserModal.deleteMany({ projectId });
+
+    if (newUserIds.length > 0) {
+      const projectUsers = await projectUserModal.create(
+        newUserIds.map((userId) => ({ projectId, userId }))
+      );
+      res.status(201).json(projectUsers);
+    } else {
+      res.status(400).json({ error: "No valid user IDs provided." });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
+
+router.get("/:projectId", ensureGuest, async (req, res) => {
+  const projectId = req.params.projectId;
+  console.log("Project ID", projectId);
+  try {
+    const projectUsers = await projectUserModal
+      .find({ projectId })
+      .populate("userId", "-__v -createdAt -password")
+      .select("-__v -createdAt");
+    res.status(200).json(projectUsers);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+module.exports = router;
