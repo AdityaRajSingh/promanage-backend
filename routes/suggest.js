@@ -5,7 +5,7 @@ const User = require("../models/User"); // Import the User model
 const UserSkill = require("../models/UserSkill"); // Import the UserSkill model
 const ProjectUser = require("../models/ProjectUser"); // Import the ProjectUser model
 
-router.get("/:projectId", ensureGuest, async (req, res) => {
+router.get("/:projectId", async (req, res) => {
   try {
     const projectId = req.params.projectId;
 
@@ -16,11 +16,11 @@ router.get("/:projectId", ensureGuest, async (req, res) => {
       return res.status(404).json({ error: "Project not found" });
     }
 
-    // Step 2: Fetch a list of users and their skills
+    // Step 2: Fetch a list of users and their skills from User and UserSkill models
     const usersWithSkills = await User.aggregate([
       {
         $lookup: {
-          from: "userskills", // This should match the collection name for UserSkill
+          from: "userskills", // This should be the name of your UserSkill collection
           localField: "_id",
           foreignField: "userId",
           as: "skills",
@@ -29,23 +29,23 @@ router.get("/:projectId", ensureGuest, async (req, res) => {
     ]);
 
     // Step 3: Fetch the list of 'In Progress' state projects for the users
-    const inProgressProjects = await ProjectUser.find({
-      userId: { $in: usersWithSkills.map((user) => user._id) },
-      status: "In Progress",
-    }).populate("projectId");
+    const usersWithOngoingProjects = await Promise.all(
+      usersWithSkills.map(async (user) => {
+        const ongoingProjects = await ProjectUser.find({
+          userId: user._id,
+          status: "In Progress",
+        });
 
-    // Step 4: Compile the information
-    const suggestedData = {
-      project,
-      usersWithSkills,
-      inProgressProjects,
-    };
+        user.noOfOngoingProjects = ongoingProjects.length;
+        return user;
+      })
+    );
 
-    // Step 5: Send the response
-    res.json(suggestedData);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    // Step 4: Send the response
+    res.status(200).json(usersWithOngoingProjects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
