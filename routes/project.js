@@ -2,6 +2,19 @@ const router = require("express").Router();
 const { ensureGuest, ensureAdmin } = require("../middleware/auth");
 const projectModal = require("../models/Project");
 
+router.get("/in-progress", ensureGuest, (req, res) => {
+  projectModal
+    .find({ status: "In Progress" })
+    .select("-__v -createdAt")
+    .exec()
+    .then((projects) => {
+      res.json(projects).status(200);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
 // Read a project by ID
 router.get("/:projectId", ensureGuest, (req, res) => {
   const id = req.params.projectId;
