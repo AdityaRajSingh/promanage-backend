@@ -174,14 +174,21 @@ router.post("/", ensureGuest, (req, res) => {
     image,
   });
 
-  user
-    .save()
-    .then(() => {
-      res.status(201).json(user);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: error.message });
-    });
+  //if user already exists, then return the user
+  userModel.findOne({ googleId: googleId }).then((currentUser) => {
+    if (currentUser) {
+      res.status(200).json(currentUser);
+    } else {
+      user
+        .save()
+        .then(() => {
+          res.status(201).json(user);
+        })
+        .catch((error) => {
+          res.status(500).json({ error: error.message });
+        });
+    }
+  });
 });
 
 module.exports = router;
