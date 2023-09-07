@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   googleId: {
     type: String,
     required: true,
+    unique: true,
   },
   displayName: {
     type: String,
@@ -23,6 +24,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   yearsOfExperience: {
     type: Number,
