@@ -1,0 +1,48 @@
+Table Project {
+  _id ObjectId [primary key]
+  name string [not null]
+  description string [not null]
+  clientName string [not null]
+  status enum [default: "Not Started"] 
+  estimatedDeliveryTime string [not null]
+  startDate date [not null]
+  endDate date
+  createdAt date [default: `Date.now`]
+}
+
+Table ProjectUsers {
+  _id ObjectId [primary key]
+  projectId ObjectId [ref: > Project._id]
+  userId ObjectId [ref: > User._id]
+  status enum [default: "Not Started"]
+  createdAt date [default: `Date.now`]
+}
+
+Table Skill {
+  _id ObjectId [primary key]
+  name string [not null]
+  department string
+  createdAt date [default: `Date.now`]
+}
+
+Table User {
+  _id ObjectId [primary key]
+  googleId string [not null , unique]
+  displayName string [not null]
+  firstName string [not null]
+  lastName string [not null]
+  image string
+  email string [not null, unique]
+  yearsOfExperience int
+  designation string
+  createdAt date [default: `Date.now`]
+}
+
+Table UserSkills {
+  _id ObjectId [primary key]
+  userId ObjectId [ref: > User._id]
+  skillId ObjectId [ref: > Skill._id]
+  yearsOfExperience int [not null]
+  rating int [not null]
+  createdAt date [default: `Date.now`]
+}
