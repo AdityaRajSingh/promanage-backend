@@ -72,13 +72,13 @@ router.get("/:userId", ensureGuest, async (req, res) => {
 
 // Update a user by ID and skills
 router.put("/:userId", ensureGuest, async (req, res) => {
-  const id = req.params.userId;
+  const userId = req.params.userId;
   const { skills, ...userData } = req.body;
 
   try {
     // Update user details
     const updatedUser = await userModel
-      .findByIdAndUpdate(id, userData, { new: true })
+      .findByIdAndUpdate(userId, userData, { new: true })
       .select("-__v -googleId -createdAt")
       .exec();
 
@@ -86,62 +86,58 @@ router.put("/:userId", ensureGuest, async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Update user skills
+    // Find the existing user skills
+    const existingUserSkills = await userSkillModel.find({ userId });
 
-    // Create an array to store the Skill objects to be created
-    const skillsToCreate = [];
+    // Create a list of skill names from the existing user skills
+    const existingUserSkillNames = existingUserSkills.map(
+      (skill) => skill.skillId.name
+    );
 
-    // Create an array to store the UserSkill objects to be created
-    const userSkillsToCreate = [];
+    // Iterate through the input skills
+    for (const skill of skills) {
+      const { name, yoe, rating } = skill;
 
-    // Iterate over skills array
-    for (const skillData of skills) {
       // Check if the skill already exists
-      const existingSkill = await Skill.findOne({ name: skillData.name });
-      let newSkill;
+      const existingSkill = await Skill.findOne({ name });
 
-      if (!existingSkill) {
-        // Skill doesn't exist, create a new one and push it to the array
-        newSkill = new Skill({
-          name: skillData.name,
+      if (existingSkill) {
+        // Skill exists, update user skill if necessary
+        if (!existingUserSkillNames.includes(name)) {
+          // Create a new UserSkills entry if the user doesn't have this skill
+          await userSkillModel.create({
+            userId,
+            skillId: existingSkill._id,
+            yearsOfExperience: yoe,
+            rating: rating,
+          });
+        } else {
+          // Update the existing UserSkills entry
+          await userSkillModel.findOneAndUpdate(
+            { userId, skillId: existingSkill._id },
+            { yearsOfExperience: yoe, rating: rating }
+          );
+        }
+      } else {
+        // Skill doesn't exist, create a new skill and user skill entry
+        const newSkill = await Skill.create({ name });
+        await userSkillModel.create({
+          userId,
+          skillId: newSkill._id,
+          yearsOfExperience: yoe,
+          rating: rating,
         });
-        skillsToCreate.push(newSkill);
       }
-
-      // Create a UserSkill object
-      const userSkillData = {
-        userId: id,
-        skillId: existingSkill ? existingSkill._id : newSkill._id,
-        yearsOfExperience: skillData.yoe,
-        rating: skillData.rating,
-      };
-      userSkillsToCreate.push(userSkillData);
     }
 
-    // Save all new skills in parallel
-    const createdSkills = await Promise.all(
-      skillsToCreate.map((skill) => skill.save())
-    );
+    // Remove user skills not included in the input
+    for (const userSkill of existingUserSkills) {
+      if (!skills.some((skill) => skill.name === userSkill.skillId.name)) {
+        await userSkillModel.findByIdAndRemove(userSkill._id);
+      }
+    }
 
-    // // Create or update user skill records
-    // const updatedUserSkills = await UserSkill.bulkWrite(
-    //   userSkillsToCreate.map((userSkill) => ({
-    //     updateOne: {
-    //       filter: { userId, id: userSkill.skillId },
-    //       update: { $set: userSkill },
-    //       upsert: true,
-    //     },
-    //   }))
-    // );
-
-    // Create user skill records
-    const createdUserSkills = await userSkillModel.insertMany(
-      userSkillsToCreate
-    );
-
-    res.status(201).json({ updatedUser, skills: createdSkills });
-
-    // res.status(200).json({ user: updatedUser, skills: updatedUserSkills });
+    return res.status(200).json({ message: "Skills updated successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
