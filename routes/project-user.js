@@ -28,7 +28,7 @@ router.get("/:projectId", ensureGuest, async (req, res) => {
   try {
     const projectUsers = await projectUserModal
       .find({ projectId })
-      .populate("userId", "-__v -createdAt -password")
+      .populate("userId", "-__v -createdAt -googleId ")
       .select("-__v -createdAt");
     res.status(200).json(projectUsers);
   } catch (error) {
