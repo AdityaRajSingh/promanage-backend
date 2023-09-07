@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: ProManageAI
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://localhost
+paths:
+  /user/64f96fe4e06255003378de58:
+    get:
+      tags:
+        - Users
+      summary: Individual User
+      description: Individual User
+      operationId: individualUser
+      responses:
+        "200":
+          description: ""
+    put:
+      tags:
+        - Users
+      summary: Update User
+      description: Update User
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                designation:
+                  type: string
+                  example: Senior Software Engineer
+                skills:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        example: React
+                      rating:
+                        type: number
+                        example: 3
+                      yoe:
+                        type: number
+                        example: 3.5
+                  example:
+                    - name: React
+                      rating: 3
+                      yoe: 3.5
+                    - name: Node
+                      rating: 4
+                      yoe: 4.5
+                    - name: Gatsby
+                      rating: 4
+                      yoe: 3.4
+                yearsOfExperience:
+                  type: number
+                  example: 5
+            example:
+              designation: Senior Software Engineer
+              skills:
+                - name: React
+                  rating: 3
+                  yoe: 3.5
+                - name: Node
+                  rating: 4
+                  yoe: 4.5
+                - name: Gatsby
+                  rating: 4
+                  yoe: 3.4
+              yearsOfExperience: 5
+      responses:
+        "200":
+          description: ""
+    delete:
+      tags:
+        - Users
+      summary: Delete a User
+      description: Delete a User
+      operationId: deleteAUser
+      responses:
+        "200":
+          description: ""
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Users
+      description: Users
+      operationId: users
+      responses:
+        "200":
+          description: ""
+  /user:
+    post:
+      tags:
+        - Users
+      summary: Create User
+      description: Create User
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: >-
+                    eyJhbGciOiJSUzI1NiIsImtpZCI6IjgzOGMwNmM2MjA0NmMyZDk0OGFmZmUxMzdkZDUzMTAxMjlmNGQ1ZDEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTA4NTY3MzUwMDkzNjEyMTMyMTQiLCJoZCI6InRydWVzcGFycm93LmNvbSIsImVtYWlsIjoiZGFrc2hAdHJ1ZXNwYXJyb3cuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJPOVZWWWJ6NGZVd2pYS29hLU5STUVRIiwibmFtZSI6IkRha3NoIEJoYXJkd2FqIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBY0hUdGN6Q1MtNUhWMS1YYUZEcjF3SUFvTm1GRzdpdmJkeVJ2VXRhREUwemxvRz1zOTYtYyIsImdpdmVuX25hbWUiOiJEYWtzaCIsImZhbWlseV9uYW1lIjoiQmhhcmR3YWoiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY5NDA3MjcwMSwiZXhwIjoxNjk0MDc2MzAxfQ.VBsWJbi5po8yn2PbddjpVkkNFjRmhswXAZJhhwP3ac7CpJJgY71y-xrXBVx0dRWZxGzwJ9o0cy3JvrCDwij-T_PkEbnk_XRZRmjEqBX_LPn_E0Vxol54BUnA-zznzR4fGFseTAyw92Q5miOYsl-xnE4YhuDbToFDcIavQe3VUIn-XuuBjmafj7iJqQCfby0AUFSPEIFUygLp4Y2mf1igKjaWZgudAusXXYyv2j41vwctOGlAWpGZxijuqTHlNBo0LMTqufi8ZdPyb60exwXaE8eWqtqcy6iHcQUumf4DhyNpnas9siC2ZKsSttKXOyorp4ElcXZ2CEGLnO5L7bl6NQ
+            example:
+              token: >-
+                eyJhbGciOiJSUzI1NiIsImtpZCI6IjgzOGMwNmM2MjA0NmMyZDk0OGFmZmUxMzdkZDUzMTAxMjlmNGQ1ZDEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTA4NTY3MzUwMDkzNjEyMTMyMTQiLCJoZCI6InRydWVzcGFycm93LmNvbSIsImVtYWlsIjoiZGFrc2hAdHJ1ZXNwYXJyb3cuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJPOVZWWWJ6NGZVd2pYS29hLU5STUVRIiwibmFtZSI6IkRha3NoIEJoYXJkd2FqIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBY0hUdGN6Q1MtNUhWMS1YYUZEcjF3SUFvTm1GRzdpdmJkeVJ2VXRhREUwemxvRz1zOTYtYyIsImdpdmVuX25hbWUiOiJEYWtzaCIsImZhbWlseV9uYW1lIjoiQmhhcmR3YWoiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY5NDA3MjcwMSwiZXhwIjoxNjk0MDc2MzAxfQ.VBsWJbi5po8yn2PbddjpVkkNFjRmhswXAZJhhwP3ac7CpJJgY71y-xrXBVx0dRWZxGzwJ9o0cy3JvrCDwij-T_PkEbnk_XRZRmjEqBX_LPn_E0Vxol54BUnA-zznzR4fGFseTAyw92Q5miOYsl-xnE4YhuDbToFDcIavQe3VUIn-XuuBjmafj7iJqQCfby0AUFSPEIFUygLp4Y2mf1igKjaWZgudAusXXYyv2j41vwctOGlAWpGZxijuqTHlNBo0LMTqufi8ZdPyb60exwXaE8eWqtqcy6iHcQUumf4DhyNpnas9siC2ZKsSttKXOyorp4ElcXZ2CEGLnO5L7bl6NQ
+      responses:
+        "200":
+          description: ""
+  /project/64f97d352fcee4dfd0f00643:
+    put:
+      tags:
+        - Project
+      summary: Update a project
+      description: Update a project
+      operationId: updateAProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientName:
+                  type: string
+                  example: Completed Labs
+                description:
+                  type: string
+                  example: updated description of Completed project
+                name:
+                  type: string
+                  example: Updated Completed project
+                staus:
+                  type: string
+                  example: Completed
+            example:
+              clientName: Completed Labs
+              description: updated description of Completed project
+              name: Updated Completed project
+              staus: Completed
+      responses:
+        "200":
+          description: ""
+    delete:
+      tags:
+        - Project
+      summary: Delete a project
+      description: Delete a project
+      operationId: deleteAProject
+      responses:
+        "200":
+          description: ""
+  /project-user/64f97cba2fcee4dfd0f0063f:
+    get:
+      tags:
+        - Project
+      summary: Project Users
+      description: Project Users
+      operationId: projectUsers
+      responses:
+        "200":
+          description: ""
+  /project:
+    get:
+      tags:
+        - Project
+      summary: All projects
+      description: All projects
+      operationId: allProjects
+      responses:
+        "200":
+          description: ""
+    post:
+      tags:
+        - Project
+      summary: Create a project
+      description: Create a project
+      operationId: createAProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientName:
+                  type: string
+                  example: Not started Labs
+                description:
+                  type: string
+                  example: description of not started project
+                endDate:
+                  type: string
+                  example: "2023-09-05"
+                estimatedDeliveryTime:
+                  type: string
+                  example: 1 month
+                name:
+                  type: string
+                  example: Test Not started project
+                startDate:
+                  type: string
+                  example: "2023-09-29"
+            example:
+              clientName: Not started Labs
+              description: description of not started project
+              endDate: "2023-09-05"
+              estimatedDeliveryTime: 1 month
+              name: Test Not started project
+              startDate: "2023-09-29"
+      responses:
+        "200":
+          description: ""
+  /project-user:
+    post:
+      tags:
+        - Project
+      summary: Add user to Project
+      description: Add user to Project
+      operationId: addUserToProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectId:
+                  type: string
+                  example: 64f97cba2fcee4dfd0f0063f
+                userIds:
+                  type: array
+                  items:
+                    type: string
+                    example: 64f96fe4e06255003378de58
+                  example:
+                    - 64f96fe4e06255003378de58
+            example:
+              projectId: 64f97cba2fcee4dfd0f0063f
+              userIds:
+                - 64f96fe4e06255003378de58
+      responses:
+        "200":
+          description: ""
+  /project/64f97cba2fcee4dfd0f0063f:
+    get:
+      tags:
+        - Project
+      summary: Project Details
+      description: Project Details
+      operationId: projectDetails
+      responses:
+        "200":
+          description: ""
+  /suggest/64f97cba2fcee4dfd0f0063f:
+    get:
+      tags:
+        - Project
+      summary: Suggest
+      description: Suggest
+      operationId: suggest
+      responses:
+        "200":
+          description: ""
+  /:
+    get:
+      summary: Health-Check
+      description: Health-Check
+      operationId: healthCheck
+      responses:
+        "200":
+          description: ""
+tags:
+  - name: Users
+  - name: Project
