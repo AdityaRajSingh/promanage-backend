@@ -5,8 +5,7 @@ const userSkillModel = require("../models/UserSkill");
 const Skill = require("../models/Skill");
 const projectModal = require("../models/Project");
 const ProjectUser = require("../models/ProjectUser");
-
-// Read a user by ID
+const { default: jwtDecode } = require("jwt-decode");
 
 router.get("/:userId", ensureGuest, async (req, res) => {
   try {
@@ -151,6 +150,45 @@ router.delete("/:userId", ensureGuest, (req, res) => {
     .catch((error) => {
       res.status(500).json({ error: error.message });
     });
+});
+
+// Create a user
+router.post("/", ensureGuest, (req, res) => {
+  const token = req.body.token;
+
+  const decodeToken = jwtDecode(token);
+
+  const firstName = decodeToken.name.split(" ")[0];
+  const lastName = decodeToken.name.split(" ")[1];
+  const displayName = decodeToken.name;
+  const email = decodeToken.email;
+  const googleId = decodeToken.sub;
+  const image = decodeToken.picture;
+
+  const user = new userModel({
+    googleId,
+    firstName,
+    lastName,
+    displayName,
+    email,
+    image,
+  });
+
+  //if user already exists, then return the user
+  userModel.findOne({ googleId: googleId }).then((currentUser) => {
+    if (currentUser) {
+      res.status(200).json(currentUser);
+    } else {
+      user
+        .save()
+        .then(() => {
+          res.status(201).json(user);
+        })
+        .catch((error) => {
+          res.status(500).json({ error: error.message });
+        });
+    }
+  });
 });
 
 module.exports = router;
