@@ -12,27 +12,6 @@ router.get("/:userId", ensureGuest, async (req, res) => {
   try {
     const userId = req.params.userId;
 
-    const id = req.params.userId;
-
-    let projectUsers = await ProjectUser.find({ userId: id });
-
-    let projectIds = projectUsers.map((projectUser) => projectUser.projectId);
-
-    let projects = await projectModal.find({ _id: { $in: projectIds } });
-
-    let projectDetails = projects.map((project) => {
-      return {
-        projectId: project._id,
-        name: project.name,
-        description: project.description,
-        clientName: project.clientName,
-        estimatedDeliveryTime: project.estimatedDeliveryTime,
-        startDate: project.startDate,
-        endDate: project.endDate,
-        status: project.status,
-      };
-    });
-
     // Find the user by userId
     const user = await userModel
       .findById(userId)
@@ -53,6 +32,20 @@ router.get("/:userId", ensureGuest, async (req, res) => {
       yearsOfExperience: skill.yearsOfExperience,
       rating: skill.rating,
       skill: skill.skillId,
+    }));
+
+    // Find the projects the user is involved in
+
+    const projectUsers = await ProjectUser.find({ userId })
+      .populate("projectId", "-__v -createdAt")
+      .select("-__v -createdAt -userId -_id");
+
+    console.log(projectUsers);
+
+    // Rename the "projectId" field to "project" in each projectUser object
+
+    const projectDetails = projectUsers.map((project) => ({
+      project: project.projectId,
     }));
 
     // Construct the response JSON
