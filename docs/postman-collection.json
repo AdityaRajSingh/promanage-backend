@@ -1,0 +1,777 @@
+{
+  "info": {
+    "_postman_id": "889de096-470a-4b97-8b1e-d1d4c0af15e1",
+    "name": "ProManageAI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16813568"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Individual User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData.user.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email should be in a valid format\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The 'skills' array is present and contains at least one skill\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.skills).to.exist.and.to.be.an('array');",
+                  "    pm.expect(responseData.skills).to.have.lengthOf.at.least(1);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The projects array is present and contains at least one project\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.projects).to.exist.and.to.be.an('array');",
+                  "    pm.expect(responseData.projects.length).to.be.at.least(1, \"Projects array should contain at least one project\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/user/64f96fe4e06255003378de58",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user", "64f96fe4e06255003378de58"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required field - message\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.message).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Message is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData.message).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response time is in an acceptable range\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify that the user ID in the request URL matches the ID in the response\", function () {",
+                  "    const userId = \"64f96fe4e06255003378de58\";",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.message).to.exist;",
+                  "    pm.expect(pm.request.url).to.match(new RegExp(userId));",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"yearsOfExperience\": 5,\n    \"designation\": \"Senior Software Engineer\",\n    \"skills\" : [\n       {\"name\": \"React\", \"yoe\": 3.5,  \"rating\": 3},\n        {\"name\": \"Node\", \"yoe\": 4.5,  \"rating\": 4},\n        {\"name\": \"Gatsby\", \"yoe\": 3.4, \"rating\": 4}\n      ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/user/64f96fe4e06255003378de58",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user", "64f96fe4e06255003378de58"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "    pm.expect(pm.response.json()).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    responseData.forEach(function(user){",
+                  "        pm.expect(user.email).to.match(/\\S+@\\S+\\.\\S+/);",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"yearsOfExperience is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "",
+                  "    responseData.forEach(function (user) {",
+                  "        pm.expect(user.yearsOfExperience).to.be.a('number').that.is.greaterThanOrEqual(0);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/user/64f96fe4e06255003378de58",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user", "64f96fe4e06255003378de58"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.email).to.exist.and.to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"createdAt is a valid date format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/, \"createdAt should be a valid date format\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"yearsOfExperience is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.yearsOfExperience).to.be.a('number');",
+                  "    pm.expect(responseData.yearsOfExperience).to.be.greaterThan(-1);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\" : \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjgzOGMwNmM2MjA0NmMyZDk0OGFmZmUxMzdkZDUzMTAxMjlmNGQ1ZDEiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI4NzUzMTk5MzIxOTAtNWZpbXNyZ2ZwZXNuOG1jaHBzY2t1bGw1Zml2dmdjNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTA4NTY3MzUwMDkzNjEyMTMyMTQiLCJoZCI6InRydWVzcGFycm93LmNvbSIsImVtYWlsIjoiZGFrc2hAdHJ1ZXNwYXJyb3cuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJPOVZWWWJ6NGZVd2pYS29hLU5STUVRIiwibmFtZSI6IkRha3NoIEJoYXJkd2FqIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBY0hUdGN6Q1MtNUhWMS1YYUZEcjF3SUFvTm1GRzdpdmJkeVJ2VXRhREUwemxvRz1zOTYtYyIsImdpdmVuX25hbWUiOiJEYWtzaCIsImZhbWlseV9uYW1lIjoiQmhhcmR3YWoiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTY5NDA3MjcwMSwiZXhwIjoxNjk0MDc2MzAxfQ.VBsWJbi5po8yn2PbddjpVkkNFjRmhswXAZJhhwP3ac7CpJJgY71y-xrXBVx0dRWZxGzwJ9o0cy3JvrCDwij-T_PkEbnk_XRZRmjEqBX_LPn_E0Vxol54BUnA-zznzR4fGFseTAyw92Q5miOYsl-xnE4YhuDbToFDcIavQe3VUIn-XuuBjmafj7iJqQCfby0AUFSPEIFUygLp4Y2mf1igKjaWZgudAusXXYyv2j41vwctOGlAWpGZxijuqTHlNBo0LMTqufi8ZdPyb60exwXaE8eWqtqcy6iHcQUumf4DhyNpnas9siC2ZKsSttKXOyorp4ElcXZ2CEGLnO5L7bl6NQ\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/user",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "item": [
+        {
+          "name": "Delete a project",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/project/64f97d352fcee4dfd0f00643",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project", "64f97d352fcee4dfd0f00643"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a project",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Completed project\",\n  \"description\": \"updated description of Completed project\",\n  \"clientName\": \"Completed Labs\",\n  \"staus\": \"Completed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/project/64f97d352fcee4dfd0f00643",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project", "64f97d352fcee4dfd0f00643"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Project Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array with at least one element\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Each element in the response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "",
+                  "    responseData.forEach(function(element) {",
+                  "        pm.expect(element.status).to.exist.and.to.be.a('string');",
+                  "        pm.expect(element._id).to.exist.and.to.be.a('string');",
+                  "        pm.expect(element.projectId).to.exist.and.to.be.a('string');",
+                  "        pm.expect(element.userId).to.exist.and.to.be.null;",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The _id field is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    responseData.forEach(function (item) {",
+                  "        pm.expect(item._id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"projectId field is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "    ",
+                  "    responseData.forEach(function(data) {",
+                  "        pm.expect(data.projectId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"projectId field should be a non-empty string\");",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/project-user/64f97cba2fcee4dfd0f0063f",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project-user", "64f97cba2fcee4dfd0f0063f"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create a project",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData).to.have.all.keys('status', '_id', 'name', 'description', 'clientName', 'estimatedDeliveryTime', 'startDate', 'endDate', 'createdAt', '__v');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Status is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData.status).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The _id should be a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData._id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Not started project\",\n  \"description\": \"description of not started project\",\n  \"clientName\": \"Not started Labs\",\n  \"estimatedDeliveryTime\": \"1 month\",\n  \"startDate\": \"2023-09-29\",\n  \"endDate\": \"2023-09-05\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/project",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All projects",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Check if _id is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "  responseData.forEach(function(project) {",
+                  "    pm.expect(project._id).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1);",
+                  "  });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"estimatedDeliveryTime is in a valid date format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    ",
+                  "    responseData.forEach(function (item) {",
+                  "        pm.expect(item.estimatedDeliveryTime).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/project",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add user to Project",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 201\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(201);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response body contains the required fields\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    responseData.forEach(function(entry) {",
+                  "        pm.expect(entry.status).to.exist;",
+                  "        pm.expect(entry._id).to.exist;",
+                  "        pm.expect(entry.projectId).to.exist;",
+                  "        pm.expect(entry.userId).to.exist;",
+                  "        pm.expect(entry.createdAt).to.exist;",
+                  "        pm.expect(entry.__v).to.exist;",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify createdAt field is in a valid date format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "",
+                  "  responseData.forEach(function(item) {",
+                  "    pm.expect(item.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/, \"createdAt field is not in a valid date format\");",
+                  "  });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response time is within acceptable range\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The _id field should be a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    ",
+                  "    responseData.forEach(function (item) {",
+                  "        pm.expect(item._id).to.be.a('string').and.to.have.lengthOf.at.least(1);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userIds\" :  [\"64f96fe4e06255003378de58\"],\n    \"projectId\" : \"64f97cba2fcee4dfd0f0063f\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3000/project-user",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project-user"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Project Details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response has required fields\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.status).to.exist;",
+                  "  pm.expect(responseData._id).to.exist;",
+                  "  pm.expect(responseData.name).to.exist;",
+                  "  pm.expect(responseData.description).to.exist;",
+                  "  pm.expect(responseData.clientName).to.exist;",
+                  "  pm.expect(responseData.estimatedDeliveryTime).to.exist;",
+                  "  pm.expect(responseData.startDate).to.exist;",
+                  "  pm.expect(responseData.endDate).to.exist;",
+                  "});",
+                  "",
+                  "pm.test(\"Check if _id is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData._id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"_id should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"estimatedDeliveryTime is a valid date format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.estimatedDeliveryTime).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"EndDate is after StartDate\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.endDate).to.exist.and.to.be.greaterThan(responseData.startDate);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/project/64f97cba2fcee4dfd0f0063f",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["project", "64f97cba2fcee4dfd0f0063f"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Suggest",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Verify userId is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.teamMembers).to.be.an('array');",
+                  "    responseData.teamMembers.forEach(function(member) {",
+                  "        pm.expect(member.userId).to.be.a('string').and.to.have.length.above(0, \"Value should not be empty\");",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test(\"The skills array should contain at least one element\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.teamMembers).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+                  "    responseData.teamMembers.forEach(function(member) {",
+                  "        pm.expect(member.skills).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response time is less than 200ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(200);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/suggest/64f97cba2fcee4dfd0f0063f",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["suggest", "64f97cba2fcee4dfd0f0063f"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health-Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response status code is 200\", function () {",
+              "    pm.expect(pm.response.code).to.equal(200);",
+              "});",
+              "",
+              "",
+              "pm.test(\"Response body is not empty\", function () {",
+              "    pm.expect(pm.response.text()).to.not.be.empty;",
+              "});",
+              "",
+              "",
+              "pm.test(\"Response body is a string\", function () {",
+              "    pm.expect(pm.response.text()).to.be.a('string');",
+              "});",
+              "",
+              "",
+              "pm.test(\"Response time is less than 500ms\", function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);",
+              "});",
+              "",
+              "",
+              "pm.test(\"Response body is equal to expected value\", function () {",
+              "  pm.expect(pm.response.text()).to.eql(\"\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": [""]
+        }
+      },
+      "response": []
+    }
+  ]
+}
